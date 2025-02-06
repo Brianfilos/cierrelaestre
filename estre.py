@@ -96,6 +96,13 @@ archivos = [
         "parametro": "Cargar archivo XLSX (Archivo Conciliaciones Bancarias Consolidadas)",
         "nombre_df": "df_conciliaciones",
     },
+     {
+        "titulo": "Archivo EXCEL (Archivo Reservas la estrella):",
+        "color": "gray",
+        "funcion_carga": cargar_excel,
+        "parametro": "Cargar archivo XLSX (Archivo Reservas la estrella)",
+        "nombre_df": "df_reservas",
+    },
 ]
 
 # Iterar sobre los archivos para cargarlos con nombres específicos
@@ -125,7 +132,8 @@ def archivos_cargados():
         globals().get("df_cuentas_pagar"),
         globals().get("df_egreso_rubro"),
         globals().get("df_conciliaciones"),
-        globals().get("df_boletin_caja")
+        globals().get("df_boletin_caja"),
+        globals().get("df_reservas")
     ])
 
 if not archivos_cargados():
