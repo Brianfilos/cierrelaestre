@@ -177,14 +177,12 @@ if globals().get("df_ingresos") is not None and "TOTAL RECAUDO" in globals()["df
         df_agrupado["Total Recaudo Agrupado"] = df_agrupado["TOTAL RECAUDO"].apply(lambda x: f"${x:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
 
         # Mostrar las columnas 'Parte_1', 'Parte_2' y 'Total Recaudo Agrupado'
-        st.header("Total Recaudo por fuente de financiación en ejecución de ingresos:", divider="blue")
-        st.dataframe(df_agrupado[["Parte_1", "Parte_2", "Total Recaudo Agrupado"]])
+        #st.header("Total Recaudo por fuente de financiación en ejecución de ingresos:", divider="blue")
+        #st.dataframe(df_agrupado[["Parte_1", "Parte_2", "Total Recaudo Agrupado"]])
     except Exception as e:
         st.error(f"Error al procesar 'TOTAL RECAUDO': {e}")
 else:
     st.warning("No se ha encontrado la columna 'TOTAL RECAUDO' en el archivo cargado.")
-
-
 
 if globals().get("df_ingresos") is not None:  # Verifica que el DataFrame df_ingresos esté cargado
     if "Parte_1" in globals().get("df_ingresos").columns and "Parte_2" in globals().get("df_ingresos").columns and "PRESUPUESTO DEFINITIVO" in globals().get("df_ingresos").columns:  # Verifica que existan las columnas necesarias
@@ -210,15 +208,14 @@ if globals().get("df_ingresos") is not None:  # Verifica que el DataFrame df_ing
             df_agrupado2.drop(columns=["PRESUPUESTO DEFINITIVO"], inplace=True)
 
             # Mostrar el DataFrame agrupado
-            st.header("Suma de presupuesto definitivo por fuente de financiación en ejecución de ingresos:",divider="blue")
-            st.dataframe(df_agrupado2)
+            #st.header("Suma de presupuesto definitivo por fuente de financiación en ejecución de ingresos:",divider="blue")
+            #st.dataframe(df_agrupado2)
         except Exception as e:
             st.error(f"Error al procesar 'PRESUPUESTO DEFINITIVO': {e}")
     else:
         st.warning("No se encontraron las columnas 'Parte_1', 'Parte_2' o 'PRESUPUESTO DEFINITIVO' en el DataFrame.")
 else:
     st.warning("No se ha cargado el archivo CSV (Ejecución Presupuestal Ingresos).")
-
 
 st.title("PROCESAMIENTO EJECUCION DE EGRESOS:")
 
@@ -232,13 +229,13 @@ if globals().get("df_egresos") is not None:
             
             # Agrupar por 'FUEN FINA.' y 'CLASIFICACION GASTO' y sumar los valores de 'PAGOS'
             df2_agrupado = globals().get("df_egresos").groupby("FUEN FINA.")["PAGOS"].sum().reset_index()
-            
+
             
         except Exception as e:
             st.error(f"Error al agrupar los datos: {e}")
     else:
         st.warning("Las columnas 'FUEN FINA.', 'PAGOS' o 'CCPET' no existen en el archivo cargado.")
-
+        
 if globals().get("df_egresos") is not None:  
     # Procesar los pagos
     if "FUEN FINA." in globals().get("df_egresos").columns and "PAGOS" in globals().get("df_egresos").columns and "CCPET" in globals().get("df_egresos").columns:
@@ -257,7 +254,8 @@ if globals().get("df_egresos") is not None:
             st.error(f"Error al agrupar los datos: {e}")
     else:
         st.warning("Las columnas 'FUEN FINA.', 'PAGOS' o 'CCPET' no existen en el archivo cargado.")
-
+    
+    
     # Procesar el presupuesto definitivo
     if "FUEN FINA." in globals().get("df_egresos").columns and "PTTO DEFI." in globals().get("df_egresos").columns:
         try:
@@ -268,8 +266,8 @@ if globals().get("df_egresos") is not None:
             df2_agrupado2 = globals().get("df_egresos").groupby("FUEN FINA.")["PTTO DEFI."].sum().reset_index()
 
             # Mostrar el DataFrame agrupado
-            st.header("Suma de presupuesto definitivo en ejecución de egresos:",divider="red")
-            st.dataframe(df2_agrupado2)
+            #st.header("Suma de presupuesto definitivo en ejecución de egresos:",divider="red")
+            #st.dataframe(df2_agrupado2)
 
         except Exception as e:
             st.error(f"Error al agrupar los datos: {e}")
@@ -320,7 +318,7 @@ if globals().get("df_egresos") is not None:
     else:
         st.error("Error: Los DataFrames 'df_agrupado2' y 'df2_agrupado2' no están creados o definidos.")
 
-# Comparación entre recaudo y pagos
+    # Comparación entre recaudo y pagos
     if 'df_agrupado' in locals() and 'df2_agrupado' in locals():
         # Asegurémonos de que las columnas 'Total Recaudo Agrupado' y 'PAGOS' sean numéricas
         df_agrupado["Total Recaudo Agrupado"] = df_agrupado["Total Recaudo Agrupado"].replace({r'\$': '', r'\.': '', r',': '.'}, regex=True).astype(float)
@@ -347,8 +345,8 @@ if globals().get("df_egresos") is not None:
         df_comparado_recaudo_pagos = df_comparado_recaudo_pagos.drop(columns=["FUEN FINA."])
 
         # Mostrar el DataFrame con la diferencia (Recaudo - Pagos (ECB))
-        st.header("Diferencia entre Recaudo y Pagos por fuente de financiación:", divider="gray")
-        st.dataframe(df_comparado_recaudo_pagos)
+        #st.header("Diferencia entre Recaudo y Pagos por fuente de financiación:", divider="gray")
+        #st.dataframe(df_comparado_recaudo_pagos)
     else:
         st.error("Error: Los DataFrames 'df_agrupado' y 'df2_agrupado' no están creados o definidos.")
 
@@ -363,7 +361,9 @@ def extraer_fuente_y_clasificacion(rubro):
         clasificacion = rubro[:3]  # Toma los primeros 3 caracteres
     return fuente, clasificacion  # Devuelve la fuente y la clasificación
 
-   
+
+    
+    
 # Función para extraer la fuente de los rubros
 def extraer_fuente(rubro):
     if isinstance(rubro, str):  # Verifica si el valor es una cadena
@@ -389,9 +389,9 @@ if globals().get("df_cuentas_pagar") is not None:
     # Convertir a formato de pesos colombianos
     df_cuentas_pagar_agrupado["Total Pagos"] = df_cuentas_pagar_agrupado["Total Pagos"].apply(lambda x: f"${x:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
 
-    st.header("TOTAL DE PAGOS POR FUENTE EN CUENTAS POR PAGAR:", divider="green")
-    st.dataframe(df_cuentas_pagar_agrupado)
-
+    #st.header("TOTAL DE PAGOS POR FUENTE EN CUENTAS POR PAGAR:", divider="green")
+    #st.dataframe(df_cuentas_pagar_agrupado)
+    
 # Función para extraer la fuente de los rubros
 def extraer_fuente(rubro):
     if isinstance(rubro, str):  # Verifica si el valor es una cadena
@@ -420,6 +420,18 @@ if globals().get("df_egreso_rubro") is not None:
     df_egreso_agrupado2 = globals().get("df_egreso_rubro").groupby("FUENTE")["VALOR"].sum().reset_index(name="Total Egresos")
     df_egreso_agrupado2["Total Egresos"] = df_egreso_agrupado2["Total Egresos"].apply(lambda x: f"${x:,.2f}".replace(",", "X").replace(".", ",").replace("X", ","))
 
+
+
+
+
+
+
+
+
+
+
+
+
 # Cruzar los DataFrames
 if globals().get("df_comparado_recaudo_pagos") is not None:
     df_comparado_recaudo_pagos = globals().get("df_comparado_recaudo_pagos")
@@ -438,7 +450,7 @@ if globals().get("df_comparado_recaudo_pagos") is not None:
     df_comparado_recaudo_pagos = df_comparado_recaudo_pagos[columnas_seleccionadas]
 
     #st.header("MATRIZ POR FUENTE DE FINANCIACION:", divider="green")
-    st.dataframe(df_comparado_recaudo_pagos)
+    #st.dataframe(df_comparado_recaudo_pagos)
     
     
     # Aseguramos que los valores de 'RUBRO' sean cadenas y aplicamos la función
@@ -457,11 +469,11 @@ if globals().get("df_egreso_rubro") is not None:
     # Convertir a formato de pesos colombianos
     df_egreso_agrupado["Total Egresos"] = df_egreso_agrupado["Total Egresos"].apply(lambda x: f"${x:,.2f}".replace(",", "X").replace(".", ",").replace("X", "."))
 
-    st.header("TOTAL DE EGRESOS POR FUENTE Y CLASIFICACION DEL GASTO EN COMPROBANTE DE EGRESOS:", divider="green")
-    st.dataframe(df_egreso_agrupado)
+    #st.header("TOTAL DE EGRESOS POR FUENTE Y CLASIFICACION DEL GASTO EN COMPROBANTE DE EGRESOS:", divider="green")
+    #st.dataframe(df_egreso_agrupado)
     
-    st.header("EJECUCION DE EGRESOS POR CLASIFICADOR DEL GASTO", divider="red")
-    st.dataframe(df2_agrupado_CLASI)
+    #st.header("EJECUCION DE EGRESOS POR CLASIFICADOR DEL GASTO", divider="red")
+    #st.dataframe(df2_agrupado_CLASI)
     
     # Realizar el merge
     df_cruzado = df_egreso_agrupado.merge(df2_agrupado_CLASI, left_on="FUENTE", right_on="FUEN FINA.", how="inner")
@@ -510,7 +522,7 @@ if globals().get("df_egreso_rubro") is not None:
     st.header("EJECUCION POR TIPO DE GASTO:", divider="blue")
     st.dataframe(df_cruzado)
 
-        # Hacer una copia del DataFrame
+    # Hacer una copia del DataFrame
     df_comparado_recaudo_pagos_copia = df_comparado_recaudo_pagos.copy()
 
 # Función para convertir los valores a formato numérico correcto
@@ -520,30 +532,22 @@ def convertir_a_numero(valor):
         valor = valor[:-2] + "." + valor[-2:]
     return float(valor)
 
-def procesar_dataframe(df):
+def procesar_dataframe(df_comparado_recaudo_pagos_copia):
     # Convertir las columnas 'TOTAL PAGOS EN CXP', 'Total Egresos', 'PAGOS' y 'Recaudo - Pagos (ECB)' a formato numérico
-    df["TOTAL PAGOS EN CXP"] = df["TOTAL PAGOS EN CXP"].apply(convertir_a_numero)
-    df["Total Egresos"] = df["Total Egresos"].apply(convertir_a_numero)
-    df["PAGOS"] = df["PAGOS"].apply(convertir_a_numero)
-    df["Recaudo - Pagos (ECB)"] = df["Recaudo - Pagos (ECB)"].apply(convertir_a_numero)
+    df_comparado_recaudo_pagos_copia["TOTAL PAGOS EN CXP"] = df_comparado_recaudo_pagos_copia["TOTAL PAGOS EN CXP"].apply(convertir_a_numero)
+    df_comparado_recaudo_pagos_copia["Total Egresos"] = df_comparado_recaudo_pagos_copia["Total Egresos"].apply(convertir_a_numero)
+    df_comparado_recaudo_pagos_copia["PAGOS"] = df_comparado_recaudo_pagos_copia["PAGOS"].apply(convertir_a_numero)
+    df_comparado_recaudo_pagos_copia["Recaudo - Pagos (ECB)"] = df_comparado_recaudo_pagos_copia["Recaudo - Pagos (ECB)"].apply(convertir_a_numero)
 
     # Calcular 'SALDO CXP'
-    df["SALDO CXP"] = df["TOTAL PAGOS EN CXP"] - df["PAGOS"]
+    df_comparado_recaudo_pagos_copia["SALDO CXP"] = df_comparado_recaudo_pagos_copia["TOTAL PAGOS EN CXP"] - df_comparado_recaudo_pagos_copia["PAGOS"]
 
     # Calcular 'Recaudo - Pagos - SALDO CXP (ECB)'
-    df["Recaudo - Pagos - SALDO CXP (ECB)"] = df["Recaudo - Pagos (ECB)"] - df["SALDO CXP"]
+    df_comparado_recaudo_pagos_copia["Recaudo - Pagos - SALDO CXP (ECB)"] = df_comparado_recaudo_pagos_copia["Recaudo - Pagos (ECB)"] - df_comparado_recaudo_pagos_copia["SALDO CXP"]
 
     # Mostrar el DataFrame copiado con el nuevo cálculo
-    st.header("MATRIZ POR FUENTE DE FINANCIACION CON SALDO CXP:", divider="green")
-    st.dataframe(df)
-
-    return df
-
-# Uso de la función
-df_comparado_recaudo_pagos_copia = procesar_dataframe(df_comparado_recaudo_pagos_copia)
-    # Mostrar el DataFrame copiado con el nuevo cálculo
-#st.header("MATRIZ POR FUENTE DE FINANCIACION CON SALDO CXP:", divider="green")
-#st.dataframe(df_comparado_recaudo_pagos_copia)
+    # st.header("MATRIZ POR FUENTE DE FINANCIACION CON SALDO CXP:", divider="green")
+    # st.dataframe(df_comparado_recaudo_pagos_copia)
 
 def procesar_excel():
     # Obtener el DataFrame cargado
@@ -583,34 +587,33 @@ def procesar_excel():
         df_boletin_caja.at[index, 'fuente'] = fuente_actual
         df_boletin_caja.at[index, 'categoria'] = categoria_actual
     
-        # Eliminar las filas que contienen 'FUENTE:'
-        df_boletin_caja = df_boletin_caja.drop(indices_a_eliminar)
+    # Eliminar las filas que contienen 'FUENTE:'
+    df_boletin_caja = df_boletin_caja.drop(indices_a_eliminar)
     
-        # Eliminar filas que contienen 'SUBTOTAL', 'TOTAL' o 'Modulo de Tesoreria v6'
-        df_boletin_caja = df_boletin_caja[~df_boletin_caja['CODIGO'].str.contains('SUBTOTAL|TOTAL|Modulo de Tesoreria v6', na=False)]
-        
-        # Eliminar filas vacías
-        df_boletin_caja = df_boletin_caja.dropna(how='all')
-        
-        # Eliminar filas donde 'CODIGO' esté vacío o contenga 'CODIGO'
-        df_boletin_caja = df_boletin_caja[~df_boletin_caja['CODIGO'].isnull() & (df_boletin_caja['CODIGO'] != 'CODIGO')]
+    # Eliminar filas que contienen 'SUBTOTAL', 'TOTAL' o 'Modulo de Tesoreria v6'
+    df_boletin_caja = df_boletin_caja[~df_boletin_caja['CODIGO'].str.contains('SUBTOTAL|TOTAL|Modulo de Tesoreria v6', na=False)]
+    
+    # Eliminar filas vacías
+    df_boletin_caja = df_boletin_caja.dropna(how='all')
+    
+    # Eliminar filas donde 'CODIGO' esté vacío o contenga 'CODIGO'
+    df_boletin_caja = df_boletin_caja[~df_boletin_caja['CODIGO'].isnull() & (df_boletin_caja['CODIGO'] != 'CODIGO')]
 
-        # Reorganizar las columnas
-        columnas_ordenadas = ['CODIGO','fuente', 'BANCOS', 'DESCRIPCION', 'V.ANTERIOR', 'V.DEBITO', 'V.CREDITO', 'V.SIGUIENTE']
-        df_boletin_caja = df_boletin_caja[columnas_ordenadas]
-        
-        # Renombrar el DataFrame combinado
-        df_combinado_bancos = df_boletin_caja
+    # Reorganizar las columnas
+    columnas_ordenadas = ['CODIGO','fuente', 'BANCOS', 'DESCRIPCION', 'V.ANTERIOR', 'V.DEBITO', 'V.CREDITO', 'V.SIGUIENTE']
+    df_boletin_caja = df_boletin_caja[columnas_ordenadas]
+    
+    # Renombrar el DataFrame combinado
+    df_combinado_bancos = df_boletin_caja
 
     
     return df_combinado_bancos
 
 # Procesar el archivo Excel de Boletin de caja
-#df_combinado_bancos = procesar_excel()
-
+df_combinado_bancos = procesar_excel()
 #if df_combinado_bancos is not None:
-            #st.write("Vista previa de df_combinado_bancos:")
-            #st.dataframe(df_combinado_bancos)
+    #st.write("Vista previa de df_combinado_bancos:")
+    #st.dataframe(df_combinado_bancos)
 
 def cruzar_conciliaciones():
     # Obtener los DataFrames cargados
@@ -647,7 +650,7 @@ def cruzar_conciliaciones():
 
 # Procesar el cruce de conciliaciones
 df_conciliaciones_cruzado = cruzar_conciliaciones()
-#if df_conciliaciones_cruzado is not None:
+#f df_conciliaciones_cruzado is not None:
     #st.write("Vista previa de df_conciliaciones_cruzado:")
     #st.dataframe(df_conciliaciones_cruzado)
 
@@ -659,14 +662,16 @@ def sumar_saldo_por_fuente():
         st.error("El DataFrame de conciliaciones cruzado no se ha generado correctamente.")
         return None
     
-    # Asegurarse de que la columna 'SALDOEXTRACTOBANCARIO' sea numérica
+    # Asegurarse de que las columnas 'SALDOEXTRACTOBANCARIO' y 'SALDOENLIBROS' sean numéricas
     df_conciliaciones_cruzado['SALDOEXTRACTOBANCARIO'] = pd.to_numeric(df_conciliaciones_cruzado['SALDOEXTRACTOBANCARIO'], errors='coerce')
+    df_conciliaciones_cruzado['SALDOENLIBROS'] = pd.to_numeric(df_conciliaciones_cruzado['SALDOENLIBROS'], errors='coerce')
     
-    # Sumar 'SALDOEXTRACTOBANCARIO' acumulado por la columna 'fuente'
-    df_suma_saldo = df_conciliaciones_cruzado.groupby('fuente')['SALDOEXTRACTOBANCARIO'].sum().reset_index()
+    # Sumar 'SALDOEXTRACTOBANCARIO' y 'SALDOENLIBROS' acumulado por la columna 'fuente'
+    df_suma_saldo = df_conciliaciones_cruzado.groupby('fuente')[['SALDOEXTRACTOBANCARIO', 'SALDOENLIBROS']].sum().reset_index()
     
     # Convertir los valores sumados a formato de pesos
     df_suma_saldo['SALDOEXTRACTOBANCARIO'] = df_suma_saldo['SALDOEXTRACTOBANCARIO'].apply(lambda x: f"${x:,.2f}")
+    df_suma_saldo['SALDOENLIBROS'] = df_suma_saldo['SALDOENLIBROS'].apply(lambda x: f"${x:,.2f}")
     
     return df_suma_saldo
 
@@ -694,10 +699,20 @@ def cruzar_saldo_con_recaudo():
     df_suma_saldo['fuente'] = df_suma_saldo['fuente'].astype(str)
     
     # Realizar el cruce de datos
-    df_resultado = df_comparado_recaudo_pagos_copia.merge(df_suma_saldo[['fuente', 'SALDOEXTRACTOBANCARIO']], left_on='FUENTE', right_on='fuente', how='left')
+    df_resultado = df_comparado_recaudo_pagos_copia.merge(df_suma_saldo[['fuente', 'SALDOEXTRACTOBANCARIO', 'SALDOENLIBROS']], left_on='FUENTE', right_on='fuente', how='left')
     
     # Eliminar la columna 'fuente' duplicada después del merge
     df_resultado = df_resultado.drop(columns=['fuente'])
+    
+    # Convertir las columnas 'SALDOEXTRACTOBANCARIO' y 'SALDOENLIBROS' a numéricas
+    df_resultado['SALDOEXTRACTOBANCARIO'] = pd.to_numeric(df_resultado['SALDOEXTRACTOBANCARIO'].str.replace(',', '').str.replace('$', ''), errors='coerce')
+    df_resultado['SALDOENLIBROS'] = pd.to_numeric(df_resultado['SALDOENLIBROS'].str.replace(',', '').str.replace('$', ''), errors='coerce')
+    
+    # Crear la columna 'EXTRACTO-LIBROS' como la resta de 'SALDOEXTRACTOBANCARIO' menos 'SALDOENLIBROS'
+    df_resultado['EXTRACTO-LIBROS'] = df_resultado['SALDOEXTRACTOBANCARIO'] - df_resultado['SALDOENLIBROS']
+    
+    # Convertir los valores de 'EXTRACTO-LIBROS' a formato de moneda
+    df_resultado['EXTRACTO-LIBROS'] = df_resultado['EXTRACTO-LIBROS'].apply(lambda x: f"${x:,.2f}")
     
     return df_resultado
 
@@ -706,7 +721,104 @@ df_resultado = cruzar_saldo_con_recaudo()
 if df_resultado is not None:
     st.header("MATRIZ POR FUENTE DE FINANCIACION:", divider="green")
     st.dataframe(df_resultado)
+    
+def separar_fuente_de_rubro():
+    # Obtener el DataFrame de reservas
+    df_reservas = globals().get("df_reservas")
+    
+    if df_reservas is None:
+        st.error("El DataFrame de reservas no se ha generado correctamente.")
+        return None
+    
+    # Separar la columna 'RUBRO' y extraer la fuente
+    df_reservas['FUENTE'] = df_reservas['RUBRO'].apply(lambda x: x.split('.')[-1] if isinstance(x, str) else '')
+    
+    # Mover la columna 'FUENTE' al principio del DataFrame
+    cols = ['FUENTE'] + [col for col in df_reservas if col != 'FUENTE']
+    df_reservas = df_reservas[cols]
+    
+    return df_reservas
+
+# Procesar la separación de fuente de rubro
+df_reservas_procesado = separar_fuente_de_rubro()
+#if df_reservas_procesado is not None:
+    #st.header("RESERVAS CON FUENTE SEPARADA:", divider="green")
+    #st.dataframe(df_reservas_procesado)
 
 
+def separar_fuente_de_rubro():
+    # Obtener el DataFrame de reservas
+    df_reservas = globals().get("df_reservas")
+    
+    if df_reservas is None:
+        st.error("El DataFrame de reservas no se ha generado correctamente.")
+        return None
+    
+    # Eliminar espacios en los nombres de las columnas
+    df_reservas.columns = df_reservas.columns.str.replace(' ', '')
+    
+    # Separar la columna 'RUBRO' y extraer la fuente
+    df_reservas['FUENTE'] = df_reservas['RUBRO'].apply(lambda x: x.split('.')[-1] if isinstance(x, str) else '')
+    
+    # Mover la columna 'FUENTE' al principio del DataFrame
+    cols = ['FUENTE'] + [col for col in df_reservas if col != 'FUENTE']
+    df_reservas = df_reservas[cols]
+    
+    return df_reservas
 
+def agrupar_reservas_por_fuente():
+    df_reservas = separar_fuente_de_rubro()
+    if df_reservas is None:
+        return None
+    
+    # Verificar si la columna 'VALORDELARESERVA' existe
+    if 'VALORDELARESERVA' not in df_reservas.columns:
+        st.error("La columna 'VALORDELARESERVA' no existe en el DataFrame de reservas.")
+        return None
+    
+    # Convertir la columna 'VALORDELARESERVA' a numérico
+    df_reservas['VALORDELARESERVA'] = pd.to_numeric(df_reservas['VALORDELARESERVA'], errors='coerce')
+    
+    # Agrupar por 'FUENTE' y sumar los valores de la reserva
+    df_reservas_agrupado = df_reservas.groupby('FUENTE')['VALORDELARESERVA'].sum().reset_index()
+    
+    # Convertir los valores sumados a formato de moneda
+    df_reservas_agrupado['VALORDELARESERVA'] = df_reservas_agrupado['VALORDELARESERVA'].apply(lambda x: f"${x:,.2f}")
+    
+    return df_reservas_agrupado
 
+# Procesar la agrupación de reservas por fuente
+df_reservas_agrupado = agrupar_reservas_por_fuente()
+#if df_reservas_agrupado is not None:
+    #st.header("VALOR ACUMULADO DE RESERVAS POR FUENTE:", divider="green")
+    #st.dataframe(df_reservas_agrupado)
+
+def cruzar_resultado_con_reservas(df_resultado, df_reservas_agrupado):
+    if df_resultado is None or df_reservas_agrupado is None:
+        st.error("Uno de los DataFrames de entrada es None.")
+        return None
+
+    # Convertir las columnas 'FUENTE' a tipo string para realizar el merge
+    df_resultado['FUENTE'] = df_resultado['FUENTE'].astype(str)
+    df_reservas_agrupado['FUENTE'] = df_reservas_agrupado['FUENTE'].astype(str)
+    
+    # Verificar el contenido de los DataFrames antes del merge
+    print("Contenido de df_resultado antes del merge:")
+    print(df_resultado.head())
+    print("Contenido de df_reservas_agrupado antes del merge:")
+    print(df_reservas_agrupado.head())
+    
+    # Realizar el cruce de datos
+    df_resultado_cruzado = df_resultado.merge(df_reservas_agrupado[['FUENTE', 'VALORDELARESERVA']], on='FUENTE', how='left')
+    
+    # Verificar el contenido del DataFrame después del merge
+    print("Contenido de df_resultado_cruzado después del merge:")
+    print(df_resultado_cruzado.head())
+    
+    return df_resultado_cruzado
+
+# Procesar el cruce de df_resultado con df_reservas_agrupado
+df_resultado_cruzado = cruzar_resultado_con_reservas(df_resultado, df_reservas_agrupado)
+if df_resultado_cruzado is not None:
+    st.header("MATRIZ POR FUENTE DE FINANCIACION:", divider="green")
+    st.dataframe(df_resultado_cruzado)
